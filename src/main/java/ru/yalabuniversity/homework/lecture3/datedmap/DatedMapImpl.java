@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class DatedMapImpl implements DatedMap{
+public class DatedMapImpl implements DatedMap {
     private Map<String, String> keyValueMap;
     private Map<String, Date> keyDateMap;
 
@@ -13,6 +13,7 @@ public class DatedMapImpl implements DatedMap{
         keyValueMap = new HashMap<>();
         keyDateMap = new HashMap<>();
     }
+
     @Override
     public void put(String key, String value) {
         Date date = new Date();

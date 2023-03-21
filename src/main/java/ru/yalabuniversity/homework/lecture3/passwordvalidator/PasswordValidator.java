@@ -8,21 +8,19 @@ public class PasswordValidator {
         try {
             if (login.length() >= 20) {
                 throw new WrongLoginException("Логин слишком длинный");
-            } else if (!login.matches("([a-zA-Z]|[0-9]|\\_)*")) {
+            } else if (!login.matches("([a-zA-Z]|[0-9]|\\_)*")) { // Регулярка которая проверяет что все символы либо латинские, либо числа, либо нижние подчеркивания
                 throw new WrongLoginException("Логин содержит недопустимые символы");
             }
-
             if (password.length() >= 20) {
                 throw new WrongPasswordException("Пароль слишком длинный");
             } else if (!password.matches("([a-zA-Z]|[0-9]|\\_)*")) {
-                throw new WrongLoginException("Пароль содержит недопустимые символы");
+                throw new WrongPasswordException("Пароль содержит недопустимые символы");
             }
-
-            if(password.hashCode() != confirmPassword.hashCode()) {
+            // Знаем про контракт equals и hashCode, сначала проврим на hash, а уж потом при необходимости тяжеловесный equals
+            if (password.hashCode() != confirmPassword.hashCode()) {
                 throw new WrongPasswordException("Пароль и подтверждение не совпадают");
-            }
-            else {
-                if(!password.equals(confirmPassword)){
+            } else {
+                if (!password.equals(confirmPassword)) {
                     throw new WrongPasswordException("Пароль и подтверждение не совпадают");
                 }
             }

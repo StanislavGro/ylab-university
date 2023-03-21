@@ -14,9 +14,6 @@ public class Employee {
     private Employee boss;
     private List<Employee> subordinates = new ArrayList<>();
 
-    public Employee() {
-    }
-
     public Employee(Long id, Long bossId, String name, String position, Employee boss, List<Employee> subordinates) {
         this.id = id;
         this.bossId = bossId;

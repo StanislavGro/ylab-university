@@ -7,9 +7,11 @@ import java.util.Scanner;
 
 public class Validator {
     private File file;
+
     public Validator(File file) {
         this.file = file;
     }
+
     public boolean isSorted() {
         try (Scanner scanner = new Scanner(new FileInputStream(file))) {
             long prev = Long.MIN_VALUE;

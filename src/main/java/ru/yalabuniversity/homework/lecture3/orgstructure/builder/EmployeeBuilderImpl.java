@@ -5,7 +5,11 @@ import ru.yalabuniversity.homework.lecture3.orgstructure.Employee;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeBuilderImpl implements EmployeeBuilder{
+/**
+ * ДОПОЛНЕНИЕ!
+ * Реализация паттерна Builder
+ */
+public class EmployeeBuilderImpl implements EmployeeBuilder {
     private Long id;
     private Long bossId;
     private String name;
@@ -56,10 +60,10 @@ public class EmployeeBuilderImpl implements EmployeeBuilder{
     @Override
     public Employee build() {
         return new Employee(this.id,
-                            this.bossId,
-                            this.name,
-                            this.position,
-                            this.boss,
-                            this.subordinates);
+                this.bossId,
+                this.name,
+                this.position,
+                this.boss,
+                this.subordinates);
     }
 }

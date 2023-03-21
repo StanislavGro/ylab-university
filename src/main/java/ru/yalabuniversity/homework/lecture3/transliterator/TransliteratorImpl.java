@@ -3,8 +3,8 @@ package ru.yalabuniversity.homework.lecture3.transliterator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TransliteratorImpl implements Transliterator{
-    private static Map<Character, String> translitMap;
+public class TransliteratorImpl implements Transliterator {
+    private static final Map<Character, String> translitMap;
 
     static {
         translitMap = new HashMap<>();
@@ -46,8 +46,8 @@ public class TransliteratorImpl implements Transliterator{
     @Override
     public String transliterate(String source) {
         StringBuilder result = new StringBuilder();
-        for(char ch : source.toCharArray()){
-            if(translitMap.containsKey(ch)){
+        for (char ch : source.toCharArray()) {
+            if (translitMap.containsKey(ch)) {
                 result.append(translitMap.get(ch));
             } else {
                 result.append(ch);
