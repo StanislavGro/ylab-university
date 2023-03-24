@@ -5,28 +5,28 @@ public class DatedMapTest {
         DatedMap datedMap = new DatedMapImpl();
         datedMap.put("first", "Hello");
         datedMap.put("second", "ylab");
-        // Такой ключ есть, вернем результат, вернет Hello
+        // РўР°РєРѕР№ РєР»СЋС‡ РµСЃС‚СЊ, РІРµСЂРЅРµРј СЂРµР·СѓР»СЊС‚Р°С‚, РІРµСЂРЅРµС‚ Hello
         System.out.println(datedMap.get("first"));
-        // Такого ключа у нас нет, вернет null
+        // РўР°РєРѕРіРѕ РєР»СЋС‡Р° Сѓ РЅР°СЃ РЅРµС‚, РІРµСЂРЅРµС‚ null
         System.out.println(datedMap.get("third"));
-        // Ключ имеется, вернет true
+        // РљР»СЋС‡ РёРјРµРµС‚СЃСЏ, РІРµСЂРЅРµС‚ true
         System.out.println(datedMap.containsKey("second"));
-        // А вот такого ключа нет, вернется false
+        // Рђ РІРѕС‚ С‚Р°РєРѕРіРѕ РєР»СЋС‡Р° РЅРµС‚, РІРµСЂРЅРµС‚СЃСЏ false
         System.out.println(datedMap.containsKey("fourth"));
         datedMap.put("third", "!");
         // [third, first, second]
         System.out.println(datedMap.keySet());
-        // Вернем последнее время добавление ключа second
+        // Р’РµСЂРЅРµРј РїРѕСЃР»РµРґРЅРµРµ РІСЂРµРјСЏ РґРѕР±Р°РІР»РµРЅРёРµ РєР»СЋС‡Р° second
         System.out.println(datedMap.getKeyLastInsertionDate("second"));
-        // Заснем на секунду
+        // Р—Р°СЃРЅРµРј РЅР° СЃРµРєСѓРЅРґСѓ
         Thread.sleep(1000);
         datedMap.put("second", "YLAB");
-        // И еще раз
+        // Р РµС‰Рµ СЂР°Р·
         System.out.println(datedMap.getKeyLastInsertionDate("second"));
-        // А теперь удалим ключ third и попытаемся найти его время, вернет null
+        // Рђ С‚РµРїРµСЂСЊ СѓРґР°Р»РёРј РєР»СЋС‡ third Рё РїРѕРїС‹С‚Р°РµРјСЃСЏ РЅР°Р№С‚Рё РµРіРѕ РІСЂРµРјСЏ, РІРµСЂРЅРµС‚ null
         datedMap.remove("third");
         System.out.println(datedMap.getKeyLastInsertionDate("third"));
-        // Ну и проверим есть ли оно
+        // РќСѓ Рё РїСЂРѕРІРµСЂРёРј РµСЃС‚СЊ Р»Рё РѕРЅРѕ
         System.out.println(datedMap.containsKey("third"));
     }
 }

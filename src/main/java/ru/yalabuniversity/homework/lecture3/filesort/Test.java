@@ -11,10 +11,10 @@ public class Test {
         File dataFile = new Generator().generate(".\\src\\main\\resources\\files\\data.txt", count);
         System.out.println(new Validator(dataFile).isSorted());
         long start = System.currentTimeMillis();
-        // Немного изменил параметры метода, добавил в придачу к файлу количество элементов в нем. Думаю уловие не поменятся, а фокус не будет сбиваться на подсчет количества элементов
+        // РќРµРјРЅРѕРіРѕ РёР·РјРµРЅРёР» РїР°СЂР°РјРµС‚СЂС‹ РјРµС‚РѕРґР°, РґРѕР±Р°РІРёР» РІ РїСЂРёРґР°С‡Сѓ Рє С„Р°Р№Р»Сѓ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ РЅРµРј. Р”СѓРјР°СЋ СѓР»РѕРІРёРµ РЅРµ РїРѕРјРµРЅСЏС‚СЃСЏ, Р° С„РѕРєСѓСЃ РЅРµ Р±СѓРґРµС‚ СЃР±РёРІР°С‚СЊСЃСЏ РЅР° РїРѕРґСЃС‡РµС‚ РєРѕР»РёС‡РµСЃС‚РІР° СЌР»РµРјРµРЅС‚РѕРІ
         File sortedFile = new Sorter().sortFile(dataFile, count);
         long end = System.currentTimeMillis();
-        System.out.println("Время выполнения: " + (end - start) + " мс");
+        System.out.println("Р’СЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ: " + (end - start) + " РјСЃ");
         System.out.println(new Validator(sortedFile).isSorted());
     }
 }

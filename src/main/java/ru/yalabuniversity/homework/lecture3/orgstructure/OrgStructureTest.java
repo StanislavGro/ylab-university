@@ -19,7 +19,7 @@ public class OrgStructureTest {
                     System.out.println(employee.getId() + " " + employee.getName() + " " + employee.getPosition());
                 }
             } else {
-                throw new IOException("Вы передали пустой файл или файл, в котором нет босса");
+                throw new IOException("Р’С‹ РїРµСЂРµРґР°Р»Рё РїСѓСЃС‚РѕР№ С„Р°Р№Р» РёР»Рё С„Р°Р№Р», РІ РєРѕС‚РѕСЂРѕРј РЅРµС‚ Р±РѕСЃСЃР°");
             }
         } catch (IOException e) {
             e.printStackTrace();

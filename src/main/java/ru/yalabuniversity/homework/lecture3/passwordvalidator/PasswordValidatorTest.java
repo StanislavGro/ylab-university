@@ -12,8 +12,8 @@ public class PasswordValidatorTest {
         System.out.println("login: " + login);
         System.out.println("password: " + password);
         System.out.println("confirm: " + confirmPassword);
-        System.out.println("Все ли верно?");
-        System.out.println(PasswordValidator.check(login, password, confirmPassword) ? "Да, все верно" : "");
+        System.out.println("Р’СЃРµ Р»Рё РІРµСЂРЅРѕ?");
+        System.out.println(PasswordValidator.check(login, password, confirmPassword) ? "Р”Р°, РІСЃРµ РІРµСЂРЅРѕ" : "");
         System.out.println("-------------------");
     }
 }

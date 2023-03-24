@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ДОПОЛНЕНИЕ!
- * Реализация паттерна Builder
+ * Р”РћРџРћР›РќР•РќРР•!
+ * Р РµР°Р»РёР·Р°С†РёСЏ РїР°С‚С‚РµСЂРЅР° Builder
  */
 public class EmployeeBuilderImpl implements EmployeeBuilder {
     private Long id;

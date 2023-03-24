@@ -7,21 +7,21 @@ public class PasswordValidator {
     public static boolean check(String login, String password, String confirmPassword) {
         try {
             if (login.length() >= 20) {
-                throw new WrongLoginException("Логин слишком длинный");
-            } else if (!login.matches("([a-zA-Z]|[0-9]|\\_)*")) { // Регулярка которая проверяет что все символы либо латинские, либо числа, либо нижние подчеркивания
-                throw new WrongLoginException("Логин содержит недопустимые символы");
+                throw new WrongLoginException("Р›РѕРіРёРЅ СЃР»РёС€РєРѕРј РґР»РёРЅРЅС‹Р№");
+            } else if (!login.matches("([a-zA-Z]|[0-9]|\\_)*")) { // Р РµРіСѓР»СЏСЂРєР° РєРѕС‚РѕСЂР°СЏ РїСЂРѕРІРµСЂСЏРµС‚ С‡С‚Рѕ РІСЃРµ СЃРёРјРІРѕР»С‹ Р»РёР±Рѕ Р»Р°С‚РёРЅСЃРєРёРµ, Р»РёР±Рѕ С‡РёСЃР»Р°, Р»РёР±Рѕ РЅРёР¶РЅРёРµ РїРѕРґС‡РµСЂРєРёРІР°РЅРёСЏ
+                throw new WrongLoginException("Р›РѕРіРёРЅ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹");
             }
             if (password.length() >= 20) {
-                throw new WrongPasswordException("Пароль слишком длинный");
+                throw new WrongPasswordException("РџР°СЂРѕР»СЊ СЃР»РёС€РєРѕРј РґР»РёРЅРЅС‹Р№");
             } else if (!password.matches("([a-zA-Z]|[0-9]|\\_)*")) {
-                throw new WrongPasswordException("Пароль содержит недопустимые символы");
+                throw new WrongPasswordException("РџР°СЂРѕР»СЊ СЃРѕРґРµСЂР¶РёС‚ РЅРµРґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹");
             }
-            // Знаем про контракт equals и hashCode, сначала проврим на hash, а уж потом при необходимости тяжеловесный equals
+            // Р—РЅР°РµРј РїСЂРѕ РєРѕРЅС‚СЂР°РєС‚ equals Рё hashCode, СЃРЅР°С‡Р°Р»Р° РїСЂРѕРІСЂРёРј РЅР° hash, Р° СѓР¶ РїРѕС‚РѕРј РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё С‚СЏР¶РµР»РѕРІРµСЃРЅС‹Р№ equals
             if (password.hashCode() != confirmPassword.hashCode()) {
-                throw new WrongPasswordException("Пароль и подтверждение не совпадают");
+                throw new WrongPasswordException("РџР°СЂРѕР»СЊ Рё РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РЅРµ СЃРѕРІРїР°РґР°СЋС‚");
             } else {
                 if (!password.equals(confirmPassword)) {
-                    throw new WrongPasswordException("Пароль и подтверждение не совпадают");
+                    throw new WrongPasswordException("РџР°СЂРѕР»СЊ Рё РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РЅРµ СЃРѕРІРїР°РґР°СЋС‚");
                 }
             }
         } catch (WrongLoginException wle) {

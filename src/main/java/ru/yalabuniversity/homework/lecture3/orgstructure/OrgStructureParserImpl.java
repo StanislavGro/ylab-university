@@ -12,21 +12,21 @@ import java.util.Map;
 public class OrgStructureParserImpl implements OrgStructureParser {
     @Override
     public Employee parseStructure(File csvFile) throws IOException {
-        // Объявляем ссылку на ген. директора, чтобы в результате возвратить
+        // РћР±СЉСЏРІР»СЏРµРј СЃСЃС‹Р»РєСѓ РЅР° РіРµРЅ. РґРёСЂРµРєС‚РѕСЂР°, С‡С‚РѕР±С‹ РІ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РІРѕР·РІСЂР°С‚РёС‚СЊ
         Employee boss = null;
-        // Данная мапа содержит id работника и саму сущность
+        // Р”Р°РЅРЅР°СЏ РјР°РїР° СЃРѕРґРµСЂР¶РёС‚ id СЂР°Р±РѕС‚РЅРёРєР° Рё СЃР°РјСѓ СЃСѓС‰РЅРѕСЃС‚СЊ
         Map<Long, Employee> employeeMap = new HashMap<>();
-        // Данная мапа содержит в себе список прямых подчиненных привязанных к id работника
+        // Р”Р°РЅРЅР°СЏ РјР°РїР° СЃРѕРґРµСЂР¶РёС‚ РІ СЃРµР±Рµ СЃРїРёСЃРѕРє РїСЂСЏРјС‹С… РїРѕРґС‡РёРЅРµРЅРЅС‹С… РїСЂРёРІСЏР·Р°РЅРЅС‹С… Рє id СЂР°Р±РѕС‚РЅРёРєР°
         Map<Long, List<Employee>> subordinatesMap = new HashMap<>();
-        // Используем try-catch with resources для удобного закрытия буфера, сами исключения побрасываются вниз по стеку и обрабатываются там-же
+        // РСЃРїРѕР»СЊР·СѓРµРј try-catch with resources РґР»СЏ СѓРґРѕР±РЅРѕРіРѕ Р·Р°РєСЂС‹С‚РёСЏ Р±СѓС„РµСЂР°, СЃР°РјРё РёСЃРєР»СЋС‡РµРЅРёСЏ РїРѕР±СЂР°СЃС‹РІР°СЋС‚СЃСЏ РІРЅРёР· РїРѕ СЃС‚РµРєСѓ Рё РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‚СЃСЏ С‚Р°Рј-Р¶Рµ
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFile))) {
-            // Первая строка с полями тамблицы нам не нужна, просто дастаем и не сохраняем
+            // РџРµСЂРІР°СЏ СЃС‚СЂРѕРєР° СЃ РїРѕР»СЏРјРё С‚Р°РјР±Р»РёС†С‹ РЅР°Рј РЅРµ РЅСѓР¶РЅР°, РїСЂРѕСЃС‚Рѕ РґР°СЃС‚Р°РµРј Рё РЅРµ СЃРѕС…СЂР°РЅСЏРµРј
             bufferedReader.readLine();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] parsedLine = line.split(";");
                 Long employeeId = Long.parseLong(parsedLine[0]);
-                // Либо это босс либо сотрудник у которого есть босс
+                // Р›РёР±Рѕ СЌС‚Рѕ Р±РѕСЃСЃ Р»РёР±Рѕ СЃРѕС‚СЂСѓРґРЅРёРє Сѓ РєРѕС‚РѕСЂРѕРіРѕ РµСЃС‚СЊ Р±РѕСЃСЃ
                 Long bossId = parsedLine[1].equals("") ? null : Long.parseLong(parsedLine[1]);
                 String employeeName = parsedLine[2];
                 String employeePosition = parsedLine[3];
@@ -41,7 +41,7 @@ public class OrgStructureParserImpl implements OrgStructureParser {
                 if (bossId == null) {
                     boss = employee;
                 } else {
-                    List<Employee> subordinates = subordinatesMap.getOrDefault(bossId, new ArrayList<>()); // по условию ArrayList, хотя я бы задействовал LinkedList
+                    List<Employee> subordinates = subordinatesMap.getOrDefault(bossId, new ArrayList<>()); // РїРѕ СѓСЃР»РѕРІРёСЋ ArrayList, С…РѕС‚СЏ СЏ Р±С‹ Р·Р°РґРµР№СЃС‚РІРѕРІР°Р» LinkedList
                     subordinates.add(employee);
                     subordinatesMap.put(bossId, subordinates);
                 }
@@ -53,7 +53,7 @@ public class OrgStructureParserImpl implements OrgStructureParser {
     }
 
     private void addSubordinates(Map<Long, Employee> employeeMap, Map<Long, List<Employee>> subordinatesMap) {
-        // Просто пройдемся по списку работников и каждому добавим прямых подчиненных и боссов. Сложность O(n * (log2(n)) ^ 2)
+        // РџСЂРѕСЃС‚Рѕ РїСЂРѕР№РґРµРјСЃСЏ РїРѕ СЃРїРёСЃРєСѓ СЂР°Р±РѕС‚РЅРёРєРѕРІ Рё РєР°Р¶РґРѕРјСѓ РґРѕР±Р°РІРёРј РїСЂСЏРјС‹С… РїРѕРґС‡РёРЅРµРЅРЅС‹С… Рё Р±РѕСЃСЃРѕРІ. РЎР»РѕР¶РЅРѕСЃС‚СЊ O(n * (log2(n)) ^ 2)
         for (Employee employee : employeeMap.values()) {
             employee.setBoss(employeeMap.getOrDefault(employee.getBossId(), null));
             employee.setSubordinates(subordinatesMap.getOrDefault(employee.getId(), null));

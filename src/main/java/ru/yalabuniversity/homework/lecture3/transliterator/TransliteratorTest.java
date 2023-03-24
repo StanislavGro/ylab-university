@@ -2,10 +2,10 @@ package ru.yalabuniversity.homework.lecture3.transliterator;
 
 public class TransliteratorTest {
     public static void main(String[] args) {
-        test("HELLO! œ–»¬≈“! Go, boy!");
+        test("HELLO! –ü–†–ò–í–ï–¢! Go, boy!");
         test("");
-        test("My name is —“¿Õ»—À¿¬ √–Œ’Œ“Œ¬");
-        test("Õ” ¿ “”“ ”∆≈ ¬—≈ Õ¿ ¿Õ√À»…— ŒÃ");
+        test("My name is –°–¢–ê–ù–ò–°–õ–ê–í –ì–†–û–•–û–¢–û–í");
+        test("–ù–£ –ê –¢–£–¢ –£–ñ–ï –í–°–ï –ù–ê –ê–ù–ì–õ–ò–ô–°–ö–û–ú");
     }
 
     private static void test(String str) {
