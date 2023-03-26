@@ -82,4 +82,8 @@ class Movie {
   public void setAwards(Boolean awards) {
     this.awards = awards;
   }
+
+  public static MovieBuilder builder() {
+    return new MovieBuilderImpl();
+  }
 }
