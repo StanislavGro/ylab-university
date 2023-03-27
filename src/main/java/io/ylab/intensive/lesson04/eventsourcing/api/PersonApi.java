@@ -6,9 +6,9 @@ import java.util.List;
 import io.ylab.intensive.lesson04.eventsourcing.Person;
 
 public interface PersonApi {
-  void deletePerson(Long personId);
+  void deletePerson(Long personId) throws SQLException;
 
-  void savePerson(Long personId, String firstName, String lastName, String middleName);
+  void savePerson(Long personId, String firstName, String lastName, String middleName) throws SQLException;
 
   Person findPerson(Long personId) throws SQLException;
 
