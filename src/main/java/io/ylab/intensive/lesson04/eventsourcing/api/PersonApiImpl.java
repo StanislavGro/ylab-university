@@ -23,7 +23,7 @@ public class PersonApiImpl implements PersonApi {
     public void deletePerson(Long personId) throws SQLException {
         Person person = findPerson(personId);
         if(person == null) {
-            log.warn("Попытка удаления Person с id = " + personId +". Однако такого person не существует");
+            log.info("Попытка удаления Person с id = " + personId +". Однако такого person не существует");
         } else {
             String deleteQuery = "DELETE FROM person WHERE person_id = ?;";
             try (Connection connection = dataSource.getConnection();
@@ -31,6 +31,7 @@ public class PersonApiImpl implements PersonApi {
                 preparedStatement.setLong(1, personId);
                 preparedStatement.executeUpdate();
             }
+            log.info("Объект был удален");
         }
     }
 
@@ -109,7 +110,7 @@ public class PersonApiImpl implements PersonApi {
             if(person == null) {
                 log.info("Person с id = " + personId + " не существует");
             } else {
-                log.info("Получение объекта Person с id = " + personId);
+                log.info("Был получен объект Person");
             }
             return person;
         }

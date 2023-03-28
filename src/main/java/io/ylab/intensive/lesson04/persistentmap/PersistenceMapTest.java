@@ -14,19 +14,39 @@ public class PersistenceMapTest {
         try {
             DataSource dataSource = initDb();
             PersistentMap persistentMap = new PersistentMapImpl(dataSource);
+            // Добавляем в мапу значения
             persistentMap.init("first map");
-            persistentMap.put("11", "11");
-            persistentMap.put("vdvd", null);
-            persistentMap.put("22", "bfbf");
+            persistentMap.put("dog", "Duke");
+            persistentMap.put("cat", "Mimi");
+            persistentMap.put("frog", "Elis");
             System.out.println(persistentMap.getKeys());
-            // false, потому что значения у данного ключа нет
-            System.out.println(persistentMap.containsKey("vdvd"));
+            // Такой есть - true
+            System.out.println(persistentMap.containsKey("cat"));
+            // Такого уже нет
             System.out.println(persistentMap.containsKey("22"));
-            persistentMap.remove("11");
+            // Удаляем и смотрим. Cat уже нет в списке
+            persistentMap.remove("cat");
             System.out.println(persistentMap.getKeys());
-            persistentMap.init("second map");
-            persistentMap.put("83", "55");
-            persistentMap.clear();
+            // Снова добавляем и смотрим, теперь есть в списке
+            persistentMap.put("cat", "Lunka");
+            System.out.println(persistentMap.getKeys());
+            // Создаем новую мапу
+            PersistentMap persistentMap2 = new PersistentMapImpl(dataSource);
+            persistentMap2.init("second map");
+            // В этой мапе есть такой же ключ-значение как в первой
+            persistentMap2.put("dog", "Duke");
+            System.out.println(persistentMap2.get("dog"));
+            // Значение должно замениться
+            persistentMap2.put("dog", "Mike");
+            System.out.println(persistentMap2.get("dog"));
+            // А в первой - нет. Как был Duke так и должен остаться
+            System.out.println(persistentMap.get("dog"));
+            System.out.println(persistentMap2.getKeys());
+            persistentMap2.clear();
+            // Ничего не должно быть
+            System.out.println(persistentMap2.getKeys());
+            // Должно быть null
+            System.out.println(persistentMap2.get("dog"));
         } catch (SQLException e) {
             log.error(e.getMessage());
         }

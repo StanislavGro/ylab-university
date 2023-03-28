@@ -12,36 +12,43 @@ import io.ylab.intensive.lesson04.eventsourcing.api.PersonApi;
 import io.ylab.intensive.lesson04.eventsourcing.api.PersonApiImpl;
 import io.ylab.intensive.lesson04.eventsourcing.request.DeleteRequest;
 import io.ylab.intensive.lesson04.eventsourcing.request.PostRequest;
-import io.ylab.intensive.lesson04.eventsourcing.request.Request;
-import io.ylab.intensive.lesson04.eventsourcing.request.RequestMethod;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class DbApp {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String queueName = "person_queue";
-        DataSource dataSource = initDb();
+        DataSource dataSource = null;
+        ConnectionFactory connectionFactory = null;
+        try {
+            dataSource = initDb();
+            connectionFactory = initMQ();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return;
+        }
         PersonApi personApi = new PersonApiImpl(dataSource);
-        ConnectionFactory connectionFactory = initMQ();
         try (Connection connection = connectionFactory.newConnection();
              Channel channel = connection.createChannel()) {
             while (!Thread.currentThread().isInterrupted()) {
                 GetResponse message = channel.basicGet(queueName, true);
                 if (message != null) {
+                    // Если в очереди что-то появилось, считывает это
                     String received = new String(message.getBody());
-                    System.out.println(received);
                     ObjectMapper objectMapper = new ObjectMapper();
+                    // Проверяем, что если в считанном запросе есть Post (или Delete)
                     if (received.contains("\"method\":\"POST\"")) {
+                        // Получаем как раз таки запрос содержащий в себе Person на добавление
                         PostRequest postRequest = objectMapper.readValue(received, PostRequest.class);
                         Person person = postRequest.getPerson();
                         personApi.savePerson(person.getId(), person.getName(), person.getLastName(), person.getMiddleName());
                     } else if (received.contains("\"method\":\"DELETE\"")) {
+                        // Получаем как раз таки запрос содержащий в себе id на удаление
                         DeleteRequest deleteRequest = objectMapper.readValue(received, DeleteRequest.class);
                         Long id = deleteRequest.getId();
                         personApi.deletePerson(id);
@@ -50,6 +57,8 @@ public class DbApp {
                     }
                 }
             }
+        } catch (SQLException | IOException | TimeoutException e) {
+            log.error(e.getMessage());
         }
     }
 

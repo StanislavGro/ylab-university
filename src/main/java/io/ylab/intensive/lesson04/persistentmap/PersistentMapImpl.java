@@ -19,22 +19,11 @@ public class PersistentMapImpl implements PersistentMap {
     @Override
     public void init(String name) {
         this.currentMap = name;
-//        String initInsertQuery = "INSERT INTO persistent_map (map_name, KEY, value) VALUES (?, NULL, NULL)";
-//        try (Connection connection = dataSource.getConnection();
-//             PreparedStatement preparedStatement = connection.prepareStatement(initInsertQuery)) {
-//            preparedStatement.setString(1, name);
-//            preparedStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     @Override
     public boolean containsKey(String key) throws SQLException {
-        String containsKeyQuery = "SELECT COUNT(*) AS count FROM persistent_map " +
-                "WHERE map_name = ? " +
-                "and key = ? " +
-                "and value IS NOT NULL";
+        String containsKeyQuery = "SELECT COUNT(*) AS count FROM persistent_map WHERE map_name = ? AND key = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(containsKeyQuery)) {
             preparedStatement.setString(1, currentMap);
@@ -52,7 +41,7 @@ public class PersistentMapImpl implements PersistentMap {
 
     @Override
     public List<String> getKeys() throws SQLException {
-        String selectQuery = "SELECT key FROM persistent_map WHERE map_name = ? and value IS NOT NULL";
+        String selectQuery = "SELECT key FROM persistent_map WHERE map_name = ?;";
         List<String> keyList = new LinkedList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
@@ -68,15 +57,16 @@ public class PersistentMapImpl implements PersistentMap {
 
     @Override
     public String get(String key) throws SQLException {
-        String selectQuery = "SELECT value FROM persistent_map WHERE map_name = ? and key = ?";
+        String selectQuery = "SELECT value FROM persistent_map WHERE map_name = ? and key = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             preparedStatement.setString(1, currentMap);
             preparedStatement.setString(2, key);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
+                String value = resultSet.getString("value");
                 resultSet.close();
-                return resultSet.getString("value");
+                return value;
             }
             resultSet.close();
             return null;
@@ -85,7 +75,7 @@ public class PersistentMapImpl implements PersistentMap {
 
     @Override
     public void remove(String key) throws SQLException {
-        String selectQuery = "DELETE FROM persistent_map WHERE map_name = ? and key = ?";
+        String selectQuery = "DELETE FROM persistent_map WHERE map_name = ? AND key = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             preparedStatement.setString(1, currentMap);
@@ -102,11 +92,7 @@ public class PersistentMapImpl implements PersistentMap {
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             preparedStatement.setString(1, currentMap);
             preparedStatement.setString(2, key);
-            if (value == null) {
-                preparedStatement.setNull(3, Types.VARCHAR);
-            } else {
-                preparedStatement.setString(3, value);
-            }
+            preparedStatement.setString(3, value);
             preparedStatement.executeUpdate();
         }
     }

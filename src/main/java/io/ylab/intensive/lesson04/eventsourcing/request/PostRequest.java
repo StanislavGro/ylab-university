@@ -2,6 +2,7 @@ package io.ylab.intensive.lesson04.eventsourcing.request;
 
 import io.ylab.intensive.lesson04.eventsourcing.Person;
 
+//
 public class PostRequest extends Request{
     private Person person;
 
@@ -16,5 +17,9 @@ public class PostRequest extends Request{
 
     public Person getPerson() {
         return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }
