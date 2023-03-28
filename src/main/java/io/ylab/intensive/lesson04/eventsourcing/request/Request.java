@@ -1,21 +1,19 @@
 package io.ylab.intensive.lesson04.eventsourcing.request;
 
-import io.ylab.intensive.lesson04.eventsourcing.request.body.RequestBody;
-
 public class Request {
-    private final RequestMethod method;
-    private final RequestBody body;
+    private RequestMethod method;
 
-    public Request(RequestMethod method, RequestBody body) {
+    public Request(RequestMethod method) {
         this.method = method;
-        this.body = body;
     }
 
-    public RequestBody getBody() {
-        return body;
+    public void setMethod(RequestMethod method) {
+        this.method = method;
     }
+
 
     public RequestMethod getMethod() {
         return method;
     }
+
 }

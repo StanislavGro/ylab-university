@@ -1,19 +1,33 @@
 package io.ylab.intensive.lesson04.eventsourcing.db;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.GetResponse;
 import io.ylab.intensive.lesson04.DbUtil;
 import io.ylab.intensive.lesson04.RabbitMQUtil;
+import io.ylab.intensive.lesson04.eventsourcing.Person;
+import io.ylab.intensive.lesson04.eventsourcing.api.PersonApi;
+import io.ylab.intensive.lesson04.eventsourcing.api.PersonApiImpl;
+import io.ylab.intensive.lesson04.eventsourcing.request.DeleteRequest;
+import io.ylab.intensive.lesson04.eventsourcing.request.PostRequest;
+import io.ylab.intensive.lesson04.eventsourcing.request.Request;
+import io.ylab.intensive.lesson04.eventsourcing.request.RequestMethod;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 public class DbApp {
     public static void main(String[] args) throws Exception {
         String queueName = "person_queue";
         DataSource dataSource = initDb();
+        PersonApi personApi = new PersonApiImpl(dataSource);
         ConnectionFactory connectionFactory = initMQ();
         try (Connection connection = connectionFactory.newConnection();
              Channel channel = connection.createChannel()) {
@@ -22,10 +36,21 @@ public class DbApp {
                 if (message != null) {
                     String received = new String(message.getBody());
                     System.out.println(received);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    if (received.contains("\"method\":\"POST\"")) {
+                        PostRequest postRequest = objectMapper.readValue(received, PostRequest.class);
+                        Person person = postRequest.getPerson();
+                        personApi.savePerson(person.getId(), person.getName(), person.getLastName(), person.getMiddleName());
+                    } else if (received.contains("\"method\":\"DELETE\"")) {
+                        DeleteRequest deleteRequest = objectMapper.readValue(received, DeleteRequest.class);
+                        Long id = deleteRequest.getId();
+                        personApi.deletePerson(id);
+                    } else {
+                        log.error("Такого типа запроса нет");
+                    }
                 }
             }
         }
-        // тут пишем создание и запуск приложения работы с БД
     }
 
     private static ConnectionFactory initMQ() throws Exception {

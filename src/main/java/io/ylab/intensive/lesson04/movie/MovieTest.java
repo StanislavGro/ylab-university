@@ -1,20 +1,25 @@
 package io.ylab.intensive.lesson04.movie;
 
 import io.ylab.intensive.lesson04.DbUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@Slf4j
 public class MovieTest {
-    public static void main(String[] args) throws SQLException, IOException {
-        DataSource dataSource = initDb();
-        MovieLoader movieLoader = new MovieLoaderImpl(dataSource);
+    public static void main(String[] args) {
+        try {
+            DataSource dataSource = initDb();
+            MovieLoader movieLoader = new MovieLoaderImpl(dataSource);
 
-        File dataFile = new File(".\\src\\main\\resources\\files\\film.csv");
-        movieLoader.loadData(dataFile);
-
+            File dataFile = new File(".\\src\\main\\resources\\files\\film.csv");
+            movieLoader.loadData(dataFile);
+        } catch (SQLException | IOException e) {
+            log.error(e.getMessage());
+        }
 //        String selectGroupBy = "SELECT subject, count(*) AS count FROM movie GROUP BY subject;";
 //        try (Connection connection = dataSource.getConnection();
 //             Statement statement = connection.createStatement();
@@ -27,7 +32,6 @@ public class MovieTest {
 //                String columnValueTwo = rs.getString(2);
 //                System.out.println((columnValueOne == null ? "" : columnValueOne) + "\t|\t" + columnValueTwo);
 //            }
-//
 //        }
 //        P.S. реализация в основном для себя
     }

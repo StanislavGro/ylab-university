@@ -20,11 +20,15 @@ public class MovieLoaderImpl implements MovieLoader {
     @Override
     public void loadData(File file) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            // Пропускаем 2 первые строки содержащие поясняющую информацию
             bufferedReader.readLine();
             bufferedReader.readLine();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
+                // Разделяем записи в csv по разделителю;
                 String[] parsedLine = line.split(";");
+                // Если какое-то поле отсутствует (в данном случае, если оно отсутствует, то будет пустая строка ""), то мы сохраняем null
+                // Иначе значение
                 Integer year = parsedLine[0].equals("") ? null : Integer.parseInt(parsedLine[0]);
                 Integer length = parsedLine[1].equals("") ? null : Integer.parseInt(parsedLine[1]);
                 String title = parsedLine[2].equals("") ? null : parsedLine[2];

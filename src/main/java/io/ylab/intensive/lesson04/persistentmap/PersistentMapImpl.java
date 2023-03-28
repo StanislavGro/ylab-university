@@ -19,14 +19,14 @@ public class PersistentMapImpl implements PersistentMap {
     @Override
     public void init(String name) {
         this.currentMap = name;
-        String initInsertQuery = "INSERT INTO persistent_map (map_name, KEY, value) VALUES (?, NULL, NULL)";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(initInsertQuery)) {
-            preparedStatement.setString(1, name);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        String initInsertQuery = "INSERT INTO persistent_map (map_name, KEY, value) VALUES (?, NULL, NULL)";
+//        try (Connection connection = dataSource.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(initInsertQuery)) {
+//            preparedStatement.setString(1, name);
+//            preparedStatement.executeUpdate();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     @Override
@@ -61,6 +61,7 @@ public class PersistentMapImpl implements PersistentMap {
             while (resultSet.next()) {
                 keyList.add(resultSet.getString("key"));
             }
+            resultSet.close();
         }
         return keyList;
     }
