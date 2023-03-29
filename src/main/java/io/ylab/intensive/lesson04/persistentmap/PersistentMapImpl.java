@@ -8,6 +8,9 @@ import java.util.List;
 /**
  * Класс, методы которого надо реализовать
  */
+
+// В данной реализации не предусмотрено добавление одного единственного нулевого ключа на каждую из мап.
+// Значение же можно сохранять как null
 public class PersistentMapImpl implements PersistentMap {
     private DataSource dataSource;
     private String currentMap;

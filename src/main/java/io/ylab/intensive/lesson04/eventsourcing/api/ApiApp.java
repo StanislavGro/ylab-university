@@ -11,12 +11,13 @@ import io.ylab.intensive.lesson04.eventsourcing.Person;
 import io.ylab.intensive.lesson04.eventsourcing.request.DeleteRequest;
 import io.ylab.intensive.lesson04.eventsourcing.request.PostRequest;
 import io.ylab.intensive.lesson04.eventsourcing.request.Request;
-import io.ylab.intensive.lesson04.eventsourcing.request.RequestMethod;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class ApiApp {
@@ -24,10 +25,17 @@ public class ApiApp {
     private final static String EXCHANGE_NAME = "person_exchange";
     private final static String ROUTING_KEY = "person"; // Смысловой нагрузки в нем нет. Просто обучался
 
-    public static void main(String[] args) throws Exception {
-        DataSource dataSource = DbUtil.buildDataSource();
+    public static void main(String[] args) {
+        DataSource dataSource;
+        ConnectionFactory connectionFactory;
+        try {
+            dataSource = DbUtil.buildDataSource();
+            connectionFactory = initMQ();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return;
+        }
         PersonApi personApi = new PersonApiImpl(dataSource);
-        ConnectionFactory connectionFactory = initMQ();
         try (Connection connection = connectionFactory.newConnection();
              Channel channel = connection.createChannel()) {
             channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
@@ -65,6 +73,8 @@ public class ApiApp {
             Thread.sleep(3000);
             List<Person> people4 = personApi.findAll();
             System.out.println(people4);
+        } catch (SQLException | IOException | TimeoutException | InterruptedException e) {
+            log.error(e.getMessage());
         }
     }
 
