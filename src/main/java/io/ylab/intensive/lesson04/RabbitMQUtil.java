@@ -9,7 +9,7 @@ public class RabbitMQUtil {
 
     /*
      * Настройки подключения НЕ МЕНЯЕМ!
-     * Надо настроить RabbitMQ таким образом, чтобы он работал со следующими
+     * Надо настроить RabbitMQApi таким образом, чтобы он работал со следующими
      * настройками
      */
     public static ConnectionFactory buildConnectionFactory() throws IOException, TimeoutException {
