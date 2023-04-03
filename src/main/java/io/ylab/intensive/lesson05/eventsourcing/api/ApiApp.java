@@ -9,11 +9,11 @@ import java.util.List;
 @Slf4j
 public class ApiApp {
     public static void main(String[] args) {
-        // Тут пишем создание PersonApi, запуск и демонстрацию работы
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class);
         applicationContext.start();
-        PersonApi personApi = applicationContext.getBean(PersonApiImpl.class);
         try {
+            // Тут пишем создание PersonApi, запуск и демонстрацию работы
+            PersonApi personApi = applicationContext.getBean(PersonApiImpl.class);
             // Сохраняем их в бд
             personApi.savePerson(1L, "Stanislav", "Grokhotov", "Olegovich");
             personApi.savePerson(2L, "Eva", "Savelieva", "Robertovna");

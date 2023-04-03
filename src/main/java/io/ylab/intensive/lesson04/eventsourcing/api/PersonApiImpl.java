@@ -2,6 +2,7 @@ package io.ylab.intensive.lesson04.eventsourcing.api;
 
 import io.ylab.intensive.lesson04.eventsourcing.Person;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -13,9 +14,9 @@ import java.util.List;
  */
 @Slf4j
 public class PersonApiImpl implements PersonApi {
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    public PersonApiImpl(DataSource dataSource) {
+    public PersonApiImpl(@Autowired DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -23,7 +24,7 @@ public class PersonApiImpl implements PersonApi {
     public void deletePerson(Long personId) throws SQLException {
         Person person = findPerson(personId);
         if(person == null) {
-            log.info("Попытка удаления Person с id = " + personId +". Однако такого person не существует");
+            log.info("Person c id " + personId + " не был удален, так как он не существует!");
         } else {
             String deleteQuery = "DELETE FROM person WHERE person_id = ?;";
             try (Connection connection = dataSource.getConnection();
@@ -31,7 +32,7 @@ public class PersonApiImpl implements PersonApi {
                 preparedStatement.setLong(1, personId);
                 preparedStatement.executeUpdate();
             }
-            log.info("Объект был удален");
+            log.info("Person c id " + personId + " был удален");
         }
     }
 
@@ -108,9 +109,9 @@ public class PersonApiImpl implements PersonApi {
             }
             resultSet.close();
             if(person == null) {
-                log.info("Person с id = " + personId + " не существует");
+                log.info("Person с id = " + personId + " не найден");
             } else {
-                log.info("Был получен объект Person");
+                log.info("Найден объект Person с id = " + personId);
             }
             return person;
         }
@@ -132,7 +133,7 @@ public class PersonApiImpl implements PersonApi {
                 people.add(temp);
             }
         }
-        log.info("Получение списка Person с БД");
+        log.info("Получен список Person с БД");
         return people;
     }
 }

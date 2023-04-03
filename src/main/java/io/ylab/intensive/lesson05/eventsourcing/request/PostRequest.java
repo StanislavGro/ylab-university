@@ -1,9 +1,7 @@
 package io.ylab.intensive.lesson05.eventsourcing.request;
 
-
 import io.ylab.intensive.lesson05.eventsourcing.Person;
 
-//
 public class PostRequest extends Request {
     private Person person;
 

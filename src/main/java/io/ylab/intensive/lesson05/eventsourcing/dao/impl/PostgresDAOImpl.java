@@ -1,7 +1,7 @@
 package io.ylab.intensive.lesson05.eventsourcing.dao.impl;
 
 import io.ylab.intensive.lesson05.eventsourcing.Person;
-import io.ylab.intensive.lesson05.eventsourcing.dao.PersonDAO;
+import io.ylab.intensive.lesson05.eventsourcing.dao.PostgresDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,15 +11,19 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
+// Изначально собирался назвать данный класс как PersonDAO, так как тут вся работа идет
+// именно с пользователем и базой данных, но так как уже есть класс Person API,
+// который описывает бизнес логику рабботы
+// с person, то чтобы не возникало путаницы решил назвать postgresDAO. Зато это явно позволяет понять,
+// что тут идет работа с базой данных, запросы к ней. А так как у нас только одна сущность person,
+// то вопросов с чем именно работает postgresDao быть не должно
 @Slf4j
 @Component
-public class PersonDAOImpl implements PersonDAO {
+public class PostgresDAOImpl implements PostgresDAO {
     private final DataSource dataSource;
-    private final Connection connection;
 
-    public PersonDAOImpl(@Autowired DataSource dataSource, @Autowired Connection connection) {
+    public PostgresDAOImpl(@Autowired DataSource dataSource) {
         this.dataSource = dataSource;
-        this.connection = connection;
     }
 
     @Override
