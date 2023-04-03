@@ -17,8 +17,8 @@ public class DbApp {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class);
         applicationContext.start();
-        RabbitMQService rabbitMQService = applicationContext.getBean(RabbitMQServiceImpl.class);
-        PostgresDAO postgresDAO = applicationContext.getBean(PostgresDAOImpl.class);
+        RabbitMQService rabbitMQService = applicationContext.getBean(RabbitMQService.class);
+        PostgresDAO postgresDAO = applicationContext.getBean(PostgresDAO.class);
         // тут пишем создание и запуск приложения работы с БД
         try {
             while (!Thread.currentThread().isInterrupted()) {

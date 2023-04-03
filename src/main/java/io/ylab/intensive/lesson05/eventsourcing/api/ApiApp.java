@@ -13,7 +13,7 @@ public class ApiApp {
         applicationContext.start();
         try {
             // Тут пишем создание PersonApi, запуск и демонстрацию работы
-            PersonApi personApi = applicationContext.getBean(PersonApiImpl.class);
+            PersonApi personApi = applicationContext.getBean(PersonApi.class);
             // Сохраняем их в бд
             personApi.savePerson(1L, "Stanislav", "Grokhotov", "Olegovich");
             personApi.savePerson(2L, "Eva", "Savelieva", "Robertovna");
