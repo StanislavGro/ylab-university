@@ -18,6 +18,8 @@ public class ApiApp {
             personApi.savePerson(1L, "Stanislav", "Grokhotov", "Olegovich");
             personApi.savePerson(2L, "Eva", "Savelieva", "Robertovna");
             personApi.savePerson(3L, "Sergey", "Suprunchuk", null);
+            // Изначально список может быть равен нулю, если в бд ничего не было,
+            // но со второго прохода уже выведет данные, потому что они будут сохранены там
             List<Person> people = personApi.findAll();
             System.out.println(people);
             // Не нравится то, что middle name у предыдущего отсутствовал, поэтому изменим это

@@ -1,7 +1,7 @@
 package io.ylab.intensive.lesson05.eventsourcing.api;
 
 import io.ylab.intensive.lesson05.eventsourcing.Person;
-import io.ylab.intensive.lesson05.eventsourcing.dao.PostgresDAO;
+import io.ylab.intensive.lesson05.eventsourcing.dao.PersonDAO;
 import io.ylab.intensive.lesson05.eventsourcing.service.RabbitMQService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +10,15 @@ import org.springframework.stereotype.Component;
 import java.sql.SQLException;
 import java.util.List;
 
+// Представляет собой сервис для работы с Person
 @Slf4j
 @Component
 public class PersonApiImpl implements PersonApi {
-    private final PostgresDAO postgresDAO;
+    private final PersonDAO personDAO;
     private final RabbitMQService rabbitMQService;
 
-    public PersonApiImpl(@Autowired PostgresDAO postgresDAO, @Autowired RabbitMQService rabbitMQService) {
-        this.postgresDAO = postgresDAO;
+    public PersonApiImpl(@Autowired PersonDAO personDAO, @Autowired RabbitMQService rabbitMQService) {
+        this.personDAO = personDAO;
         this.rabbitMQService = rabbitMQService;
     }
 
@@ -34,11 +35,11 @@ public class PersonApiImpl implements PersonApi {
 
     @Override
     public Person findPerson(Long personId) throws SQLException {
-        return postgresDAO.findPerson(personId);
+        return personDAO.findPerson(personId);
     }
 
     @Override
     public List<Person> findAll() throws SQLException {
-        return postgresDAO.findAll();
+        return personDAO.findAll();
     }
 }

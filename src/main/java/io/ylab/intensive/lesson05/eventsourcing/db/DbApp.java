@@ -3,12 +3,10 @@ package io.ylab.intensive.lesson05.eventsourcing.db;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.GetResponse;
 import io.ylab.intensive.lesson05.eventsourcing.Person;
-import io.ylab.intensive.lesson05.eventsourcing.dao.PostgresDAO;
-import io.ylab.intensive.lesson05.eventsourcing.dao.impl.PostgresDAOImpl;
+import io.ylab.intensive.lesson05.eventsourcing.dao.PersonDAO;
 import io.ylab.intensive.lesson05.eventsourcing.request.DeleteRequest;
 import io.ylab.intensive.lesson05.eventsourcing.request.PostRequest;
 import io.ylab.intensive.lesson05.eventsourcing.service.RabbitMQService;
-import io.ylab.intensive.lesson05.eventsourcing.service.impl.RabbitMQServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -18,7 +16,7 @@ public class DbApp {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class);
         applicationContext.start();
         RabbitMQService rabbitMQService = applicationContext.getBean(RabbitMQService.class);
-        PostgresDAO postgresDAO = applicationContext.getBean(PostgresDAO.class);
+        PersonDAO personDAO = applicationContext.getBean(PersonDAO.class);
         // тут пишем создание и запуск приложения работы с БД
         try {
             while (!Thread.currentThread().isInterrupted()) {
@@ -30,12 +28,12 @@ public class DbApp {
                         // Получаем как раз таки запрос содержащий в себе Person на добавление
                         PostRequest postRequest = objectMapper.readValue(message, PostRequest.class);
                         Person person = postRequest.getPerson();
-                        postgresDAO.savePerson(person.getId(), person.getName(), person.getLastName(), person.getMiddleName());
+                        personDAO.savePerson(person.getId(), person.getName(), person.getLastName(), person.getMiddleName());
                     } else if (message.contains("\"method\":\"DELETE\"")) {
                         // Получаем как раз таки запрос содержащий в себе id на удаление
                         DeleteRequest deleteRequest = objectMapper.readValue(message, DeleteRequest.class);
                         Long id = deleteRequest.getId();
-                        postgresDAO.deletePerson(id);
+                        personDAO.deletePerson(id);
                     } else {
                         log.error("Такого типа запроса нет");
                     }

@@ -1,7 +1,7 @@
 package io.ylab.intensive.lesson05.eventsourcing.dao.impl;
 
 import io.ylab.intensive.lesson05.eventsourcing.Person;
-import io.ylab.intensive.lesson05.eventsourcing.dao.PostgresDAO;
+import io.ylab.intensive.lesson05.eventsourcing.dao.PersonDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,18 +11,13 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-// Изначально собирался назвать данный класс как PersonDAO, так как тут вся работа идет
-// именно с пользователем и базой данных, но так как уже есть класс Person API,
-// который описывает бизнес логику рабботы
-// с person, то чтобы не возникало путаницы решил назвать postgresDAO. Зато это явно позволяет понять,
-// что тут идет работа с базой данных, запросы к ней. А так как у нас только одна сущность person,
-// то вопросов с чем именно работает postgresDao быть не должно
+// DAO для работы с сущностью Person
 @Slf4j
 @Component
-public class PostgresDAOImpl implements PostgresDAO {
+public class PersonDAOImpl implements PersonDAO {
     private final DataSource dataSource;
 
-    public PostgresDAOImpl(@Autowired DataSource dataSource) {
+    public PersonDAOImpl(@Autowired DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -45,7 +40,7 @@ public class PostgresDAOImpl implements PostgresDAO {
     @Override
     public void savePerson(Long personId, String firstName, String lastName, String middleName) throws SQLException {
         Person person = findPerson(personId);
-        if(person != null) {
+        if (person != null) {
             String updateQuery = "UPDATE person SET first_name = ?, last_name = ?, middle_name = ? where person_id = ?;";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
@@ -114,7 +109,7 @@ public class PostgresDAOImpl implements PostgresDAO {
                         resultSet.getString(4));
             }
             resultSet.close();
-            if(person == null) {
+            if (person == null) {
                 log.info("Person с id = " + personId + " не существует");
             } else {
                 log.info("Был получен объект Person");

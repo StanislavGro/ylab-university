@@ -3,10 +3,10 @@ package io.ylab.intensive.lesson05.eventsourcing.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import io.ylab.intensive.lesson05.eventsourcing.Person;
-import io.ylab.intensive.lesson05.eventsourcing.service.RabbitMQService;
 import io.ylab.intensive.lesson05.eventsourcing.request.DeleteRequest;
 import io.ylab.intensive.lesson05.eventsourcing.request.PostRequest;
 import io.ylab.intensive.lesson05.eventsourcing.request.Request;
+import io.ylab.intensive.lesson05.eventsourcing.service.RabbitMQService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+// Сервис для работы с RabbitMQ
+// Я бы добавил в эту папку PersonApi и PersonApiImpl, но это делать запрещено
 @Slf4j
 @Component
 public class RabbitMQServiceImpl implements RabbitMQService {

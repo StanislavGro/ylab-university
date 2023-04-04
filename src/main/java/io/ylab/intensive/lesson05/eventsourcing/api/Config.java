@@ -40,6 +40,10 @@ public class Config {
         return connectionFactory;
     }
 
+    // Объявления бина Connection не было сделано, так как это плохо и лучше использовать пул соединений HikariCP,
+    // но было решено не реализовывать это
+
+    // Позволит закрыть соединение с бд перед уничтожением бина
     @PreDestroy
     public void destroy() throws Exception {
         if (this.dataSource != null) {
