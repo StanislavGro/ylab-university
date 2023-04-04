@@ -14,7 +14,8 @@ public class SQLQueryExtenderTest {
         try {
             SQLQueryBuilder queryBuilder = applicationContext.getBean(SQLQueryBuilder.class);
             List<String> tables = queryBuilder.getTables();
-            // вот так сгенерируем запросы для всех таблиц что есть в БД
+            System.out.println(tables);
+            // вот так сгенерируем запросы для всех таблиц, что есть в БД
             for (String tableName : tables) {
                 System.out.println(queryBuilder.queryForTable(tableName));
             }
