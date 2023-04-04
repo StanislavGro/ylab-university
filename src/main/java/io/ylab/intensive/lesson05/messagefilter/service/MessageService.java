@@ -4,5 +4,6 @@ import java.sql.SQLException;
 
 public interface MessageService {
     String getMessage();
+
     void sendMessage(String message) throws SQLException;
 }

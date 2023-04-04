@@ -59,26 +59,26 @@ public class TableDAOImpl implements TableDAO {
         cleanTable();
         String insertQuery = "INSERT INTO message_filter (obscene_word) VALUES (?)";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-                String word;
-                while ((word = bufferedReader.readLine()) != null) {
-                    preparedStatement.setString(1, word);
-                    preparedStatement.executeUpdate();
-                }
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+             BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            String word;
+            while ((word = bufferedReader.readLine()) != null) {
+                preparedStatement.setString(1, word);
+                preparedStatement.executeUpdate();
             }
-
         }
     }
 
     @Override
-    public boolean isWordExist(String message) throws SQLException{
+    public boolean isWordExist(String message) throws SQLException {
         String selectQuery = "SELECT * FROM message_filter WHERE obscene_word = ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             preparedStatement.setString(1, message);
             ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
+            boolean result = resultSet.next();
+            resultSet.close();
+            return result;
         }
     }
 }

@@ -7,12 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Configuration
 @ComponentScan(basePackages = "io.ylab.intensive.lesson05.eventsourcing")
 public class Config {
+    private DataSource dataSource;
+
     @Bean
     public DataSource dataSource() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
@@ -21,6 +24,7 @@ public class Config {
         dataSource.setPassword("postgres");
         dataSource.setDatabaseName("postgres");
         dataSource.setPortNumber(5432);
+        this.dataSource = dataSource;
 
         String ddl = ""
                 + "drop table if exists person;"
@@ -44,5 +48,12 @@ public class Config {
         connectionFactory.setPassword("guest");
         connectionFactory.setVirtualHost("/");
         return connectionFactory;
+    }
+
+    @PreDestroy
+    public void destroy() throws Exception {
+        if (this.dataSource != null) {
+            this.dataSource.getConnection().close();
+        }
     }
 }

@@ -6,7 +6,10 @@ import java.sql.SQLException;
 
 public interface TableDAO {
     boolean isTableExist() throws SQLException;
+
     void cleanTable() throws SQLException;
+
     void fillTableFromFile(File file) throws SQLException, IOException;
+
     boolean isWordExist(String message) throws SQLException;
 }
