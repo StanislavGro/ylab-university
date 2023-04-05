@@ -1,30 +1,31 @@
-package io.ylab.intensive.lesson04.eventsourcing.api;
+package io.ylab.intensive.lesson05.eventsourcing.dao.impl;
 
-import io.ylab.intensive.lesson04.eventsourcing.Person;
+import io.ylab.intensive.lesson05.eventsourcing.Person;
+import io.ylab.intensive.lesson05.eventsourcing.dao.PersonDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Тут пишем реализацию
- */
+// DAO для работы с сущностью Person
 @Slf4j
-public class PersonApiImpl implements PersonApi {
+@Component
+public class PersonDAOImpl implements PersonDAO {
     private final DataSource dataSource;
 
-    public PersonApiImpl(@Autowired DataSource dataSource) {
+    public PersonDAOImpl(@Autowired DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public void deletePerson(Long personId) throws SQLException {
         Person person = findPerson(personId);
-        if(person == null) {
-            log.info("Person c id " + personId + " не был удален, так как он не существует!");
+        if (person == null) {
+            log.info("Попытка удаления Person с id = " + personId + ". Однако такого person не существует");
         } else {
             String deleteQuery = "DELETE FROM person WHERE person_id = ?;";
             try (Connection connection = dataSource.getConnection();
@@ -32,14 +33,14 @@ public class PersonApiImpl implements PersonApi {
                 preparedStatement.setLong(1, personId);
                 preparedStatement.executeUpdate();
             }
-            log.info("Person c id " + personId + " был удален");
+            log.info("Объект был удален");
         }
     }
 
     @Override
     public void savePerson(Long personId, String firstName, String lastName, String middleName) throws SQLException {
         Person person = findPerson(personId);
-        if(person != null) {
+        if (person != null) {
             String updateQuery = "UPDATE person SET first_name = ?, last_name = ?, middle_name = ? where person_id = ?;";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
@@ -108,10 +109,10 @@ public class PersonApiImpl implements PersonApi {
                         resultSet.getString(4));
             }
             resultSet.close();
-            if(person == null) {
-                log.info("Person с id = " + personId + " не найден");
+            if (person == null) {
+                log.info("Person с id = " + personId + " не существует");
             } else {
-                log.info("Найден объект Person с id = " + personId);
+                log.info("Был получен объект Person");
             }
             return person;
         }
@@ -133,7 +134,7 @@ public class PersonApiImpl implements PersonApi {
                 people.add(temp);
             }
         }
-        log.info("Получен список Person с БД");
+        log.info("Получение списка Person с БД");
         return people;
     }
 }
